@@ -12,7 +12,7 @@ const MONGO_URI =
 mongoose.connect("mongodb://localhost:27017/basiccrud");
 mongoose.connection.once("open", () => {
   console.log("connected to mongo");
-});
+})
 
 app.use(express.urlencoded({ extended: true }));
 app.use("/fruits", fruitsController);
