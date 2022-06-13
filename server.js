@@ -1,21 +1,33 @@
 require('dotenv').config();
 const express = require("express");
 const mongoose = require("mongoose");
+const session = require("express-session");
 const Fruit = require("./models/fruits");
 const fruitsController = require("./controllers/fruits");
+const userController = require("./controllers/user");
 
 const app = express();
 const PORT = process.env.PORT || 3000
 const MONGO_URI =
   process.env.MONGO_URI || "mongodb://localhost:27017/basiccrud"
 
-mongoose.connect(MONGO_URI);
+mongoose.connect(MONGO_URI); // when deploying needs to be MONGO_URI!!!!!!!
 mongoose.connection.once("open", () => {
   console.log("connected to mongo");
 })
 
+// middleware
+app.set('trust proxy', 1) // trust first proxy
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  // cookie: { secure: true }
+}))
+
 app.use(express.urlencoded({ extended: true }));
 app.use("/fruits", fruitsController);
+app.use("/users", userController);
 
 // // Routes
 // // seed route
